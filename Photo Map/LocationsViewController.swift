@@ -8,6 +8,12 @@
 
 import UIKit
 
+// Protocol definition - top of LocationsViewController.swift
+protocol LocationsViewControllerDelegate : class {
+    func locationsPickedLocation(controller: LocationsViewController, latitude: NSNumber, longitude: NSNumber)
+}
+
+
 class LocationsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
 
     // TODO: Fill in actual CLIENT_ID and CLIENT_SECRET
@@ -18,6 +24,7 @@ class LocationsViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var searchBar: UISearchBar!
 
     var results: NSArray = []
+    weak var delegate : LocationsViewControllerDelegate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +33,17 @@ class LocationsViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.delegate = self
         searchBar.delegate = self
     }
-
+/*
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        //let cell = tableView.dequeueReusableCell(withIdentifier: "LocationCell") as! LocationCell
+        
+        var location = results[indexPath.row]
+        
+     
+        
+    }
+  */
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -54,6 +71,8 @@ class LocationsViewController: UIViewController, UITableViewDelegate, UITableVie
         let latString = "\(lat)"
         let lngString = "\(lng)"
 
+        delegate.locationsPickedLocation(controller: self, latitude: lat, longitude: lng)
+        
         print(latString + " " + lngString)
     }
     
